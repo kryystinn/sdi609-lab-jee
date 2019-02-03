@@ -17,13 +17,9 @@
 </head>
 <body>
 
-	<%
-		Integer contador = (Integer) application.getAttribute("contador");
-		if (contador == null) {
-			contador = new Integer(0);
-		}
-		application.setAttribute("contador", contador.intValue() + 1);
-	%>
+	<jsp:useBean id="contador" class="com.uniovi.sdi.Contador" scope="application" />
+	<jsp:setProperty name="contador" property="incremento" value="1" />
+
 	<!-- Barra de Navegación superior -->
 	<nav class="navbar navbar-default">
 	<div class="container-fluid">
@@ -33,32 +29,33 @@
 			<li><a href="admin.jsp">Administrar productos</a></li>
 		</ul>
 		<div class="nav navbar-right">
-			<%=contador%>
-			Visitas
-		</div>
-	</div>
-
-	<!-- Contenido -->
-	<div class="container" id="contenedor-principal">
-		<h2>Productos</h2>
-		<div class="row ">
-			<%
-				List<Producto> listaProductos = new ProductosService().getProductos();
-				for (Producto producto : listaProductos) {
-			%>
-			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-				<div>
-					<img src="<%=producto.getImagen()%>" />
-					<div><%=producto.getNombre()%></div>
-					<a href="incluirEnCarrito?producto=<%=producto.getNombre()%>"
-						class="btn btndefault"> <%=producto.getPrecio()%> €
-					</a>
-				</div>
+			<div class="center-block">
+				<jsp:getProperty name="contador" property="total" />
+				Visitas
 			</div>
-			<%
-				}
-			%>
 		</div>
-	</div>
+
+		<!-- Contenido -->
+		<div class="container" id="contenedor-principal">
+			<h2>Productos</h2>
+			<div class="row ">
+				<%
+					List<Producto> listaProductos = new ProductosService().getProductos();
+					for (Producto producto : listaProductos) {
+				%>
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+					<div>
+						<img src="<%=producto.getImagen()%>" />
+						<div><%=producto.getNombre()%></div>
+						<a href="incluirEnCarrito?producto=<%=producto.getNombre()%>"
+							class="btn btndefault"> <%=producto.getPrecio()%> €
+						</a>
+					</div>
+				</div>
+				<%
+					}
+				%>
+			</div>
+		</div>
 </body>
 </html>
